@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Penawaran Harga - {{docNumber}}</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 15mm 15mm 15mm 15mm;
+    }
+    body {
+      font-family: Calibri, Arial, Helvetica, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.3;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+    .header-table {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .title-left {
+      font-size: 13pt;
+      font-weight: bold;
+    }
+    .title-right {
+      font-size: 11pt;
+      font-weight: bold;
+      text-align: right;
+    }
+    .contact-box {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+    }
+    .contact-box td {
+      vertical-align: top;
+      padding: 4px 6px;
+    }
+    .to-col {
+      width: 52%;
+      border: 1px solid #000;
+      border-right: none;
+    }
+    .from-col {
+      width: 48%;
+      border: 1px solid #000;
+    }
+    .intro {
+      margin-bottom: 12px;
+      font-size: 10.5pt;
+    }
+    .main-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 10pt;
+    }
+    .main-table th, .main-table td {
+      border: 1px solid #000;
+      padding: 4px 6px;
+    }
+    .main-table th {
+      background-color: #f2f2f2;
+      text-align: center;
+      font-weight: bold;
+    }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-bold { font-weight: bold; }
+    
+    .totals-row td {
+      border: 1px solid #000;
+      padding: 4px 6px;
+    }
+    .notes-list {
+      margin: 8px 0 14px 20px;
+      padding: 0;
+      list-style-type: disc;
+      font-size: 10.5pt;
+    }
+    .notes-list li {
+      margin-bottom: 4px;
+    }
+    .footer-container {
+      width: 100%;
+      margin-top: 10px;
+      page-break-inside: avoid;
+    }
+    .bank-info {
+      float: left;
+      width: 60%;
+      font-size: 10pt;
+      line-height: 1.35;
+    }
+    .signature-block {
+      float: right;
+      width: 35%;
+      text-align: center;
+      font-size: 10pt;
+    }
+    .stamp-img {
+      width: 130px;
+      height: auto;
+      margin: -10px auto -5px auto;
+      display: block;
+    }
+    .clear { clear: both; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Title -->
+  <table class="header-table">
+    <tr>
+      <td class="title-left">Penawaran Harga</td>
+      <td class="title-right"><u>No. :</u> {{docNumber}}</td>
+    </tr>
+  </table>
+
+  <!-- Two-Column Contact Box -->
+  <table class="contact-box">
+    <tr>
+      <td class="to-col">
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="width: 55px; padding: 2px 0;">To</td>
+            <td style="width: 12px; padding: 2px 0;">:</td>
+            <td style="padding: 2px 0;">{{clientName}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 2px 0;">Phone</td>
+            <td style="padding: 2px 0;">:</td>
+            <td style="padding: 2px 0;">{{clientPhone}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 2px 0;"><u>Email.</u></td>
+            <td style="padding: 2px 0;">:</td>
+            <td style="padding: 2px 0;">{{clientEmail}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 2px 0;">Attn</td>
+            <td style="padding: 2px 0;">:</td>
+            <td style="padding: 2px 0;">{{clientAttn}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 2px 0;">CC</td>
+            <td style="padding: 2px 0;">:</td>
+            <td style="padding: 2px 0;">{{clientCc}}</td>
+          </tr>
+        </table>
+      </td>
+      <td class="from-col">
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="width: 50px; padding: 2px 0; vertical-align: top;"><u>From</u></td>
+            <td style="width: 12px; padding: 2px 0; vertical-align: top;">:</td>
+            <td style="padding: 2px 0;">
+              <strong>Cv. Surya Terang Sejahtera</strong><br/>
+              Jln. Kedaung Gang Tengah, RT 01 RW 06 No. 76 Cimuning, Mustika Jaya – Kota Bekasi.
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 2px 0; vertical-align: top;"><u>Phone</u></td>
+            <td style="padding: 2px 0; vertical-align: top;">:</td>
+            <td style="padding: 2px 0;">
+              081280806155<br/>
+              085718597278
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 2px 0;"><u>Email</u></td>
+            <td style="padding: 2px 0;">:</td>
+            <td style="padding: 2px 0;"><span style="color: #0563c1; text-decoration: underline;">suryaterangsejahtera@gmail.com</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 2px 0;"><u>Date</u></td>
+            <td style="padding: 2px 0;">:</td>
+            <td style="padding: 2px 0;">{{date}}.</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Salutation and Subject -->
+  <div class="intro">
+    <p style="margin: 0 0 6px 0;">Dengan Hormat,</p>
+    <p style="margin: 0;">
+      Dengan ini kami berikan penawaran harga, untuk <strong>“{{titleQuotation}}”</strong> sesuai dengan spesifikasi yang kami terima, dengan perincian harga sebagai berikut :
+    </p>
+  </div>
+
+  <!-- Main Specifications Table -->
+  <table class="main-table">
+    <thead>
+      <tr>
+        <th style="width: 5%;">No</th>
+        <th style="width: 25%;">Description</th>
+        <th style="width: 38%;">Specification</th>
+        <th style="width: 8%;">Q’ty</th>
+        <th style="width: 12%;">Price/Unit</th>
+        <th style="width: 12%;">Total Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each items}}
+        <!-- Item Main Row -->
+        <tr>
+          <td class="text-center text-bold">{{this.itemNo}}</td>
+          <td class="text-bold">{{this.description}}</td>
+          <td>{{this.specification}}</td>
+          <td class="text-center">{{this.qty}}</td>
+          <td class="text-right">{{#if this.unitPrice}}{{formatRupiah this.unitPrice}}{{/if}}</td>
+          <td class="text-right text-bold">{{#if this.subTotal}}{{formatRupiah this.subTotal}}{{/if}}</td>
+        </tr>
+
+        <!-- Nested Subcomponents (if present) -->
+        {{#each this.subComponents}}
+          {{#if @index}}
+          <!-- Spacer row between sub-assemblies matching official layout -->
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          {{/if}}
+
+          {{#if this.name}}
+          <!-- Subcomponent Title -->
+          <tr>
+            <td></td>
+            <td class="text-bold" style="padding-left: 10px;">{{this.name}}</td>
+            <td></td>
+            <td class="text-center">{{this.qty}}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          {{/if}}
+
+          <!-- Subcomponent Key-Value Specs (Row-by-Row) -->
+          {{#each this.specs}}
+          <tr>
+            <td></td>
+            <td style="padding-left: 10px;">{{this.label}}</td>
+            <td>{{this.value}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          {{/each}}
+        {{/each}}
+      {{/each}}
+
+      <!-- Sub Total Row -->
+      <tr class="totals-row">
+        <td colspan="4" style="border: none;"></td>
+        <td class="text-bold">&gt;&gt; Sub Total</td>
+        <td class="text-right text-bold">{{formatRupiah totalAmount}}</td>
+      </tr>
+      <!-- Non PPN Row -->
+      <tr class="totals-row">
+        <td colspan="4" style="border: none;"></td>
+        <td class="text-bold">&gt;&gt; Non PPN</td>
+        <td class="text-right"></td>
+      </tr>
+      <!-- Grand Total Row -->
+      <tr class="totals-row">
+        <td colspan="4" style="border: none;"></td>
+        <td class="text-bold">&gt;&gt; Grand Total</td>
+        <td class="text-right text-bold">{{formatRupiah totalAmount}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Notes and Terms -->
+  <ul class="notes-list">
+    <li>Catatan : {{note}}</li>
+    <li>Waktu Pengadaan : {{leadTime}}</li>
+    <li>Syarat Pembayaran : 
+      {{#if paymentTerms}}
+        {{paymentTerms}}
+      {{else}}
+        40% DP<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;60% setelah selesai pekerjaan
+      {{/if}}
+    </li>
+  </ul>
+
+  <p style="margin: 0 0 14px 0; font-size: 10.5pt;">
+    Demikian Penawaran dari kami, atas kerjasamanya kami ucapkan terima kasih.
+  </p>
+
+  <!-- Footer: Bank Transfer Info & Signature -->
+  <div class="footer-container">
+    <div class="bank-info">
+      <u>Pembayaran agar ditransfer ke :</u> a/n.<br/>
+      <strong>Cv Surya Terang Sejahtera</strong><br/>
+      <strong>Bank Permata</strong><br/>
+      Rekening No. <strong>1225803028</strong>
+    </div>
+
+    <div class="signature-block">
+      Hormat Kami,<br/>
+      {{#if stampBase64}}
+        <img class="stamp-img" src="{{stampBase64}}" alt="Stempel STS" />
+      {{else}}
+        <div style="height: 70px;"></div>
+      {{/if}}
+      <strong>Agus Jumadi</strong>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+</body>
+</html>
