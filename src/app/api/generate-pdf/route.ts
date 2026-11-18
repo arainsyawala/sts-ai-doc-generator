@@ -51,6 +51,41 @@ function angkaKeTerbilang(nilai: number): string {
   }
 }
 
+function toTitleCaseWords(str: string): string {
+  if (!str) return '';
+  return str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+
+function generateIndonesianDateSpellout(dateStr: string): { dayName: string; dayText: string; monthText: string; yearText: string } {
+  const indonesianDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const indonesianMonths = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  const monthNumbers = ['Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas', 'Dua Belas'];
+  
+  let d = 1, m = 1, y = 2026;
+  const match = String(dateStr).match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+  if (match) {
+    d = parseInt(match[1], 10);
+    const mIdx = indonesianMonths.findIndex(im => im.toLowerCase() === match[2].toLowerCase());
+    m = mIdx !== -1 ? mIdx + 1 : 1;
+    y = parseInt(match[3], 10);
+  } else {
+    const parsed = new Date(dateStr);
+    if (!isNaN(parsed.getTime())) {
+      d = parsed.getDate();
+      m = parsed.getMonth() + 1;
+      y = parsed.getFullYear();
+    }
+  }
+
+  const dt = new Date(y, m - 1, d);
+  const dayName = indonesianDays[dt.getDay()] || 'Senin';
+  const dayText = toTitleCaseWords(angkaKeTerbilang(d));
+  const monthText = monthNumbers[m - 1] || 'Satu';
+  const yearText = toTitleCaseWords(angkaKeTerbilang(y));
+
+  return { dayName, dayText, monthText, yearText };
+}
+
 // Register Handlebars helpers once
 let helpersRegistered = false;
 function registerHelpers() {
@@ -71,8 +106,35 @@ function registerHelpers() {
     return (angkaKeTerbilang(num) + ' rupiah').trim();
   });
 
+  handlebars.registerHelper('terbilangRupiahTitleCase', function (value) {
+    const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]+/g, '')) : value;
+    if (!num || isNaN(num)) return 'Nol Rupiah';
+    return toTitleCaseWords(angkaKeTerbilang(num) + ' rupiah');
+  });
+
+  handlebars.registerHelper('toTitleCase', function (value) {
+    return toTitleCaseWords(String(value));
+  });
+
   handlebars.registerHelper('inc', function (value) {
     return (parseInt(value, 10) || 0) + 1;
+  });
+
+  handlebars.registerHelper('formatQty', function (qty) {
+    if (!qty) return '';
+    const match = String(qty).match(/^([\d.,]+)\s*(.*)$/);
+    if (match) {
+      const num = parseFloat(match[1].replace(',', '.'));
+      if (!isNaN(num)) {
+        return `${num.toFixed(2)}  ${match[2]}`.trim();
+      }
+    }
+    return qty;
+  });
+
+  handlebars.registerHelper('nl2br', function (text) {
+    if (!text) return '';
+    return new handlebars.SafeString(String(text).replace(/\r?\n/g, '<br/>'));
   });
 
   helpersRegistered = true;
@@ -116,6 +178,7 @@ export async function POST(req: Request) {
     // Provide safe defaults for optional document fields and items
     const sanitizedBody = {
       titleQuotation: '',
+      clientAddress: '',
       clientAttn: '',
       clientPhone: '',
       clientEmail: '',
@@ -124,10 +187,18 @@ export async function POST(req: Request) {
       leadTime: '',
       paymentTerms: '',
       nonPpn: true,
+      includeBriAccount: Boolean(body?.includeBriAccount ?? false),
+      includeNote: body?.includeNote !== undefined ? Boolean(body.includeNote) : Boolean(body?.note && body.note.trim()),
+      includeLeadTime: body?.includeLeadTime !== undefined ? Boolean(body.includeLeadTime) : Boolean(body?.leadTime && body.leadTime.trim()),
       poNumber: '',
       terbilang: '',
       downPayment: 0,
       remainingPayment: 0,
+      baType: body?.baType || 'PENYELESAIAN',
+      baCompletionDate: body?.baCompletionDate || '',
+      baDpPercent: body?.baDpPercent || '',
+      baPoDate: body?.baPoDate || '',
+      baDateSpellout: body?.baDateSpellout || '',
       ...body,
       items: Array.isArray(body?.items)
         ? body.items.map((item: any, idx: number) => ({
@@ -167,9 +238,16 @@ export async function POST(req: Request) {
       });
     }
 
-    // Embed STS stamp as base64 data URI if available
+    // Prepare Berita Acara specific metadata (DP vs Penyelesaian Pekerjaan)
+    if (data.docType === 'BERITA_ACARA') {
+      data.isBaDp = data.baType === 'DP' || data.baType === 'BA_DP' || (data.docNumber && data.docNumber.toUpperCase().includes('BA-DP'));
+      data.docTitle = data.isBaDp ? 'Berita Acara Pembayaran DP' : 'Berita Acara Penyelesaian Pekerjaan';
+      data.dateSpellout = generateIndonesianDateSpellout(data.date);
+    }
+
+    // Embed STS stamp as base64 data URI if available (excluded for INVOICE to allow physical meterai & wet ink signature)
     const stampPath = path.join(process.cwd(), 'public', 'sts-stamp.png');
-    if (fs.existsSync(stampPath)) {
+    if (fs.existsSync(stampPath) && data.docType !== 'INVOICE') {
       const stampBuffer = fs.readFileSync(stampPath);
       data.stampBase64 = `data:image/png;base64,${stampBuffer.toString('base64')}`;
     }

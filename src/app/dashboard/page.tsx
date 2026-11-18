@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, FileText, ListPlus, Loader2, Plus, Sparkles, Trash2, UploadCloud, Wand2, X } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, FileText, ListPlus, Loader2, Plus, ReceiptText, Sparkles, Trash2, UploadCloud, Wand2, X } from "lucide-react";
 
 import { ExtractedDocumentSchema, ExtractedDocument } from "@/lib/schema";
 import { recognize } from "tesseract.js";
@@ -27,6 +27,7 @@ function DashboardContent() {
       docNumber: "STS/SPH/SSG/09/10/26",
       date: "09 Oktober 2026",
       clientName: "PT. Maju Bersama",
+      clientAddress: "",
       titleQuotation: "Pembuatan Baru Dust Collector",
       clientAttn: "Ibu Giacinta",
       clientPhone: "",
@@ -36,10 +37,18 @@ function DashboardContent() {
       paymentTerms: "40% DP\n60% setelah selesai pekerjaan",
       note: "",
       nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: true,
+      includeNote: false,
       poNumber: "",
       terbilang: "",
       downPayment: 0,
       remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "40% (empat puluh persen)",
+      baPoDate: "",
+      baDateSpellout: "",
       totalAmount: 320000000,
       items: [
         {
@@ -222,6 +231,7 @@ function DashboardContent() {
       docNumber: "STS/SPH/SSG/09/10/26",
       date: "09 Oktober 2026",
       clientName: "PT. Maju Bersama",
+      clientAddress: "",
       titleQuotation: "Pembuatan Baru Dust Collector",
       clientAttn: "Ibu Giacinta",
       clientPhone: "-",
@@ -231,10 +241,18 @@ function DashboardContent() {
       paymentTerms: "40% DP\n60% setelah selesai pekerjaan",
       note: "Harga belum termasuk instalasi luar kota jika ada.",
       nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: true,
+      includeNote: true,
       poNumber: "",
       terbilang: "",
       downPayment: 0,
       remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
       totalAmount: 600000000,
       items: [
         {
@@ -372,6 +390,7 @@ function DashboardContent() {
       docNumber: "STS/SPH/SSG/09/10/26",
       date: "09 Oktober 2026",
       clientName: "PT. Maju Bersama",
+      clientAddress: "",
       titleQuotation: "Buat Baru CENTRIFUGAL FAN TYPE KT",
       clientAttn: "Bp. Joko",
       clientPhone: "-",
@@ -381,10 +400,18 @@ function DashboardContent() {
       paymentTerms: "40% DP\n60% setelah selesai pekerjaan",
       note: "Harga per unit (tidak termasuk instalasi). Pengiriman: Jabodetabek.",
       nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: true,
+      includeNote: true,
       poNumber: "",
       terbilang: "",
       downPayment: 0,
       remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
       totalAmount: 251000000,
       items: [
         {
@@ -451,60 +478,597 @@ function DashboardContent() {
     setRenderKey((k) => k + 1);
   };
 
+  const loadSampleGiacintaHandwrittenNote = () => {
+    form.reset({
+      docType: "PENAWARAN",
+      docNumber: "STS/SPH/SSG/19/10/26",
+      date: "19 Oktober 2026",
+      clientName: "PT. Maju Bersama",
+      clientAddress: "",
+      titleQuotation: "Buat Baru Dust Collector Unit Ducting & Hood",
+      clientAttn: "Ibu Giacinta",
+      clientPhone: "-",
+      clientEmail: "-",
+      clientCc: "-",
+      leadTime: "1 Bulan",
+      paymentTerms: "40% DP\n60% setelah selesai pekerjaan",
+      note: "- Waktu Pengadaan barang 1 Bulan\n- Waktu Instal Menyesuaikan dilapangan",
+      nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: true,
+      includeNote: true,
+      poNumber: "",
+      terbilang: "",
+      downPayment: 0,
+      remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
+      totalAmount: 326700000,
+      items: [
+        {
+          itemNo: "1",
+          description: "DUST COLLECTOR",
+          specification: "",
+          qty: "1 Unit",
+          unitPrice: 290900000,
+          subTotal: 290900000,
+          subComponents: [
+            {
+              name: "Dust Collector Unit",
+              qty: "1 Unit",
+              specs: [
+                { label: "Type / Model", value: "SACHER" },
+                { label: "Material Casing", value: "Mild steel 2 mm" },
+                { label: "Dimension DC", value: "1700 x 900 x 3000" },
+                { label: "Foot Support / Catwalk", value: "UNP 150" },
+                { label: "Base Plate", value: "6 mm" },
+                { label: "Brecing Foot", value: "Siku 50 x 50" },
+              ],
+            },
+          ],
+        },
+        {
+          itemNo: "2",
+          description: "Centrifugal Fan",
+          specification: "TYPE KT 4",
+          qty: "1 Pcs",
+          unitPrice: 0,
+          subTotal: 0,
+          subComponents: [
+            {
+              name: "Centrifugal Fan Type KT 4",
+              qty: "1 Pcs",
+              specs: [
+                { label: "Capacity", value: "123 m³/min" },
+                { label: "Static Pressure", value: "125 mm Aq" },
+                { label: "Power", value: "5.5 Kw / 4 Pole / 3 Phase / TECO" },
+                { label: "Rotation", value: "1560 RPM" },
+              ],
+            },
+          ],
+        },
+        {
+          itemNo: "3",
+          description: "Hood",
+          specification: "",
+          qty: "3 Pcs",
+          unitPrice: 0,
+          subTotal: 0,
+          subComponents: [
+            {
+              name: "Hood",
+              qty: "3 Pcs",
+              specs: [
+                { label: "Dimension", value: "1000 x 500 x H 500" },
+                { label: "Material", value: "SUS 304 / 1.2 mm" },
+              ],
+            },
+          ],
+        },
+        {
+          itemNo: "4",
+          description: "Ducting",
+          specification: "",
+          qty: "1 Lot",
+          unitPrice: 0,
+          subTotal: 0,
+          subComponents: [
+            {
+              name: "Ducting System",
+              qty: "1 Lot",
+              specs: [
+                { label: "Components", value: "Moncong, Cabang, Elbow" },
+                { label: "Material", value: "BJLS 0.8" },
+              ],
+            },
+          ],
+        },
+        {
+          itemNo: "5",
+          description: "Jasa Instal",
+          specification: "",
+          qty: "1 Lot",
+          unitPrice: 31000000,
+          subTotal: 31000000,
+          subComponents: [],
+        },
+        {
+          itemNo: "6",
+          description: "Transportasi",
+          specification: "",
+          qty: "1 Lot",
+          unitPrice: 4800000,
+          subTotal: 4800000,
+          subComponents: [],
+        },
+      ],
+    });
+    setExpandedItems({ 0: true, 1: true, 2: true, 3: true, 4: true, 5: true });
+    setRenderKey((k) => k + 1);
+  };
+
+  const loadSampleWorkshopTigori = () => {
+    form.reset({
+      docType: "PENAWARAN",
+      docNumber: "028/STS/QUO/X/2026",
+      date: "30 Oktober 2026",
+      clientName: "PT. Tigori Mitra Asasta",
+      clientAddress: "",
+      titleQuotation: "Penyewaan Tempat Workshop",
+      clientAttn: "Bp. Aan Tigori",
+      clientPhone: "-",
+      clientEmail: "-",
+      clientCc: "-",
+      leadTime: "1 Bulan",
+      paymentTerms: "100% Pembayaran di Muka",
+      note: "Penyewaan area kerja / workshop.",
+      nonPpn: true,
+      includeBriAccount: true,
+      poNumber: "",
+      terbilang: "",
+      downPayment: 0,
+      remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
+      totalAmount: 10000000,
+      items: [
+        {
+          itemNo: "1",
+          description: "Penyewaan Tempat Workshop",
+          specification: "",
+          qty: "1 Bulan",
+          unitPrice: 10000000,
+          subTotal: 10000000,
+          subComponents: [
+            {
+              name: "Lingkup Fasilitas Workshop",
+              qty: "1 Bulan",
+              specs: [
+                { label: "Peruntukan / Fasilitas", value: "Area Kerja / Workshop" },
+                { label: "Durasi Sewa", value: "1 (Satu) Bulan" },
+                { label: "Kondisi", value: "Siap Pakai" },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    setExpandedItems({ 0: true });
+    setRenderKey((k) => k + 1);
+  };
+
+  const convertToInvoice = () => {
+    const currentNum = form.getValues("docNumber") || "";
+    const invNum = currentNum.replace(/^STS\/SPH\//i, "STS/INV/").replace(/^STS\/Q\//i, "STS/INV/") || "STS/INV/2026/001";
+    form.setValue("docType", "INVOICE");
+    form.setValue("docNumber", invNum);
+    if (!form.getValues("poNumber")) {
+      form.setValue("poNumber", "-");
+    }
+    setRenderKey((k) => k + 1);
+  };
+
+  const loadSampleInvoiceArtaIndoasia = () => {
+    form.reset({
+      docType: "INVOICE",
+      docNumber: "STS/SPH/010/011/26.",
+      date: "10 November 2026",
+      clientName: "PT. ARTA INDOASIA",
+      clientAddress: "Jl. Orchard Avenue, Cluster Garden Hous Blok BG1 No.87\nGrand Wisata, Tambun, Bekasi – 17510",
+      clientAttn: "Bp. Arip",
+      clientPhone: "-",
+      clientEmail: "-",
+      clientCc: "-",
+      poNumber: "",
+      terbilang: "enam juta tujuh ratus lima puluh ribu rupiah",
+      titleQuotation: "Repair Impeller Siroco Diameter 630",
+      leadTime: "-",
+      paymentTerms: "100% Pembayaran",
+      note: "",
+      nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: false,
+      includeNote: false,
+      downPayment: 0,
+      remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
+      totalAmount: 6750000,
+      items: [
+        {
+          itemNo: "1",
+          description: "Impeler / Kipas",
+          specification: "- Type: Siroco Ø630",
+          qty: "1.00 Lot",
+          unitPrice: 6750000,
+          subTotal: 6750000,
+          subComponents: [
+            {
+              name: "Blade / Sirip",
+              qty: "",
+              specs: [
+                { label: "Dimensi / Ukuran", value: "320 x 65 x 2 mm" },
+                { label: "Material", value: "SUS 304 / 2 mm" },
+              ],
+            },
+            {
+              name: "AS Slut",
+              qty: "3.00 Pcs",
+              specs: [
+                { label: "Dimensi / Ukuran", value: "Ø 16 x P. 520 mm" },
+                { label: "Material", value: "SUS" },
+              ],
+            },
+          ],
+        },
+        {
+          itemNo: "2",
+          description: "Cleaning Kipas",
+          specification: "",
+          qty: "1.00 Pcs",
+          unitPrice: 0,
+          subTotal: 0,
+          subComponents: [],
+        },
+        {
+          itemNo: "3",
+          description: "Balancing",
+          specification: "",
+          qty: "",
+          unitPrice: 0,
+          subTotal: 0,
+          subComponents: [],
+        },
+      ],
+    });
+    setExpandedItems({ 0: true, 1: true, 2: true });
+    setRenderKey((k) => k + 1);
+  };
+
+  const loadSampleInvoiceShinanoa = () => {
+    form.reset({
+      docType: "INVOICE",
+      docNumber: "036/STS/INV/XI/2026",
+      date: "18 November 2026",
+      clientName: "PT. SHINANOA Indonesia",
+      clientAddress: "JL. Kenari Raya Blok D No. 06, Delta Commercial Park 2\nKawasan Industri Delta Silicon 6, Lippo Cikarang\nJayamukti, Kab. Bekasi, Jawa Barat 17530",
+      clientAttn: "Ito Takayuki (President Director)",
+      clientPhone: "021-29093830",
+      clientEmail: "-",
+      clientCc: "-",
+      poNumber: "2026/SNI/XI/2292",
+      terbilang: "Empat Puluh Tiga Juta Rupiah",
+      titleQuotation: "Control Box Burner Eclips Small Part Area",
+      leadTime: "19 Nov 2026",
+      paymentTerms: "Net 30",
+      note: "Ref. SPH: STS/SPH/SSG/036/10/2026 | PO No: 2026/SNI/XI/2292",
+      nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: false,
+      includeNote: false,
+      downPayment: 0,
+      remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
+      totalAmount: 43000000,
+      items: [
+        {
+          itemNo: "1",
+          description: "Control Box Burner Eclips Small Part Area",
+          specification: "- Ref. Penawaran: STS/SPH/SSG/036/10/2026 (for SCMIN)",
+          qty: "1.00 Set",
+          unitPrice: 43000000,
+          subTotal: 43000000,
+          subComponents: [],
+        },
+      ],
+    });
+    setExpandedItems({ 0: true });
+    setRenderKey((k) => k + 1);
+  };
+
+  const loadSampleArtaIndoasia = () => {
+    form.reset({
+      docType: "PENAWARAN",
+      docNumber: "029/STS/QUO/XI/2026",
+      date: "05 November 2026",
+      clientName: "PT. Arta Indoasia",
+      clientAddress: "",
+      titleQuotation: "Repair Impeller Siroco Diameter 630",
+      clientAttn: "Bp. Arip",
+      clientPhone: "-",
+      clientEmail: "-",
+      clientCc: "-",
+      leadTime: "1-2 Minggu",
+      paymentTerms: "100% Pembayaran Setelah Selesai",
+      note: "Pekerjaan repair impeller, cleaning kipas, dan balancing.",
+      nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: true,
+      includeNote: true,
+      poNumber: "",
+      terbilang: "Lima Juta Tujuh Ratus Lima Puluh Ribu Rupiah",
+      downPayment: 0,
+      remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
+      totalAmount: 5750000,
+      items: [
+        {
+          itemNo: "1",
+          description: "Impeller / Kipas",
+          specification: "TYPE SIROCO ∅ 630",
+          qty: "1 Unit",
+          unitPrice: 5750000,
+          subTotal: 5750000,
+          subComponents: [
+            {
+              name: "Blade / Sirip",
+              qty: "23 pcs",
+              specs: [
+                { label: "Dimensi / Ukuran", value: "320 x 65 x 2 mm" },
+                { label: "Material", value: "SUS 304 / 2 mm" },
+              ],
+            },
+            {
+              name: "As / Stut",
+              qty: "3 pcs",
+              specs: [
+                { label: "Dimensi / Ukuran", value: "Ø 16 x P. 520 mm" },
+                { label: "Material", value: "SUS" },
+              ],
+            },
+          ],
+        },
+        {
+          itemNo: "2",
+          description: "Cleaning Kipas",
+          specification: "-",
+          qty: "1 pcs",
+          unitPrice: 0,
+          subTotal: 0,
+          subComponents: [],
+        },
+        {
+          itemNo: "3",
+          description: "Balancing",
+          specification: "-",
+          qty: "1 Lot",
+          unitPrice: 0,
+          subTotal: 0,
+          subComponents: [],
+        },
+      ],
+    });
+    setExpandedItems({ 0: true, 1: true, 2: true });
+    setRenderKey((k) => k + 1);
+  };
+
+  const loadSampleGunturBerkatUtama = () => {
+    form.reset({
+      docType: "PENAWARAN",
+      docNumber: "030/STS/QUO/XI/2026",
+      date: "14 November 2026",
+      clientName: "PT. Guntur Berkat Utama",
+      clientAddress: "",
+      titleQuotation: "Balancing On Site Blower",
+      clientAttn: "Bp. Didu",
+      clientPhone: "-",
+      clientEmail: "-",
+      clientCc: "-",
+      leadTime: "",
+      paymentTerms: "100% Pembayaran Setelah Selesai Pekerjaan",
+      note: "Pekerjaan dynamic balancing dilakukan langsung di lokasi (On Site).",
+      nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: false,
+      includeNote: true,
+      poNumber: "",
+      terbilang: "Lima Juta Rupiah",
+      downPayment: 0,
+      remainingPayment: 0,
+      baType: "PENYELESAIAN",
+      baCompletionDate: "",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
+      totalAmount: 5000000,
+      items: [
+        {
+          itemNo: "1",
+          description: "Impeller Type KT",
+          specification: "Φ 900",
+          qty: "1 Pcs",
+          unitPrice: 5000000,
+          subTotal: 5000000,
+          subComponents: [
+            {
+              name: "Lingkup Pekerjaan Balancing On Site",
+              qty: "1 Lot",
+              specs: [
+                { label: "Jenis Blower", value: "Impeller Type KT" },
+                { label: "Dimensi Impeller", value: "Diameter Φ 900 mm" },
+                { label: "Lokasi Pengerjaan", value: "On Site (Di Lokasi Pabrik / Workshop Klien)" },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    setExpandedItems({ 0: true });
+    setRenderKey((k) => k + 1);
+  };
+
+  const loadSampleBaPenyelesaianProfiklin = () => {
+    form.reset({
+      docType: "BERITA_ACARA",
+      docNumber: "BA-1-001-012-PC-2025",
+      date: "1 Desember 2025",
+      clientName: "PT. Profiklin Cemerlang",
+      clientAddress: "Taman Tekno Industrial Park BSD Blok J1 No.7\nSerpong - 15314",
+      clientAttn: "Bpk. Riyadh",
+      clientPhone: "021 – 758 759 88",
+      clientEmail: "-",
+      clientCc: "-",
+      leadTime: "-",
+      paymentTerms: "-",
+      note: "",
+      nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: false,
+      includeNote: false,
+      poNumber: "073/PO/PC/11112025",
+      terbilang: "",
+      downPayment: 0,
+      remainingPayment: 0,
+      totalAmount: 136500000,
+      titleQuotation: "Ducting Inlet & Dumper",
+      baType: "PENYELESAIAN",
+      baCompletionDate: "27 November 2025",
+      baDpPercent: "",
+      baPoDate: "",
+      baDateSpellout: "",
+      items: [
+        {
+          itemNo: "1",
+          description: "Ducting Inlet & Dumper",
+          specification: "Pekerjaan Ducting Inlet & Dumper progress 100% selesai",
+          qty: "1 Lot",
+          unitPrice: 136500000,
+          subTotal: 136500000,
+          subComponents: [],
+        },
+      ],
+    });
+    setExpandedItems({ 0: true });
+    setRenderKey((k) => k + 1);
+  };
+
+  const loadSampleBaDpMmid = () => {
+    form.reset({
+      docType: "BERITA_ACARA",
+      docNumber: "BA-DP-1-013-005-MMID-2026",
+      date: "13 Mei 2026",
+      clientName: "PT Megalopolis Manunggal Industrial Development",
+      clientAddress: "Kawasan Industri MM2100, Cikarang Barat, Bekasi 17520",
+      clientAttn: "Zubaidi Akhmad",
+      clientPhone: "-",
+      clientEmail: "-",
+      clientCc: "-",
+      leadTime: "-",
+      paymentTerms: "40% DP",
+      note: "",
+      nonPpn: true,
+      includeBriAccount: false,
+      includeLeadTime: false,
+      includeNote: false,
+      poNumber: "200/PUR/V/2026",
+      terbilang: "Dua Ratus Enam Puluh Juta Rupiah",
+      downPayment: 260000000,
+      remainingPayment: 390000000,
+      totalAmount: 650000000,
+      titleQuotation: "Screw Conveyor",
+      baType: "DP",
+      baCompletionDate: "",
+      baDpPercent: "40% (empat puluh persen)",
+      baPoDate: "8 Mei",
+      baDateSpellout: "",
+      items: [
+        {
+          itemNo: "1",
+          description: "Project Screw Conveyor",
+          specification: "Pembayaran Uang Muka (Down Payment) 40%",
+          qty: "1 Lot",
+          unitPrice: 650000000,
+          subTotal: 650000000,
+          subComponents: [],
+        },
+      ],
+    });
+    setExpandedItems({ 0: true });
+    setRenderKey((k) => k + 1);
+  };
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     setIsExtracting(true);
-    setExtractStatus("Reading document text with OCR...");
+    setExtractStatus("Mengirim dokumen ke Groq Vision AI...");
 
     try {
-      let ocrText = "";
+      const formData = new FormData();
+      formData.append("file", file);
 
-      let ocrResult;
-      try {
-        ocrResult = await recognize(file, "eng+ind", {
-          logger: (m) => {
-            if (m.status === "recognizing text" && typeof m.progress === "number") {
-              setExtractStatus(`Scanning text (${Math.round(m.progress * 100)}%)...`);
-            } else if (m.status) {
-              setExtractStatus(`OCR: ${m.status}...`);
-            }
-          },
-        });
-      } catch (ocrErr: any) {
-        console.warn("Retrying with English OCR:", ocrErr);
-        ocrResult = await recognize(file, "eng");
-      }
-
-      ocrText = ocrResult?.data?.text?.trim() || "";
-
-      if (!ocrText) {
-        throw new Error("No readable text detected in this image. Please upload a clear document image.");
-      }
-
-      setExtractStatus("Formatting document with Groq AI...");
+      setExtractStatus("Menganalisis tulisan tangan & tabel dengan Vision AI...");
 
       const response = await fetch("/api/extract", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: ocrText }),
+        body: formData,
       });
 
       const data = await response.json();
       
       if (!response.ok) {
-        throw new Error(data.details || data.error || "Failed to extract data");
+        throw new Error(data.details || data.error || "Gagal mengekstrak data");
       }
 
-      form.reset(data);
-      setExpandedItems({ 0: true });
+      form.reset({
+        clientAddress: '',
+        baType: 'PENYELESAIAN',
+        baCompletionDate: '',
+        baDpPercent: '',
+        baPoDate: '',
+        baDateSpellout: '',
+        ...data
+      });
+      const expanded: Record<number, boolean> = {};
+      (data.items || []).forEach((_: any, idx: number) => {
+        expanded[idx] = true;
+      });
+      setExpandedItems(expanded);
+      setRenderKey((k) => k + 1);
     } catch (error: any) {
       console.error(error);
-      alert("Error extracting data: " + (error.message || "Please try again."));
+      alert("Error ekstraksi dokumen: " + (error.message || "Silakan coba lagi."));
     } finally {
       setIsExtracting(false);
-      setExtractStatus("Extracting data...");
+      setExtractStatus("Mengekstrak data...");
     }
   };
 
@@ -553,6 +1117,15 @@ function DashboardContent() {
           <Button
             type="button"
             variant="outline"
+            onClick={loadSampleGiacintaHandwrittenNote}
+            className="flex items-center gap-2 border-purple-200 bg-purple-50/60 hover:bg-purple-100/60 text-purple-800 text-xs sm:text-sm font-medium"
+          >
+            <Sparkles className="w-4 h-4 text-purple-600" />
+            Load Coretan Tangan (Ibu Giacinta)
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
             onClick={loadSampleHandwrittenNote}
             className="flex items-center gap-2 border-emerald-200 bg-emerald-50/60 hover:bg-emerald-100/60 text-emerald-800 text-xs sm:text-sm font-medium"
           >
@@ -562,11 +1135,74 @@ function DashboardContent() {
           <Button
             type="button"
             variant="outline"
+            onClick={loadSampleInvoiceArtaIndoasia}
+            className="flex items-center gap-2 border-emerald-300 bg-emerald-50/80 hover:bg-emerald-100/80 text-emerald-900 text-xs sm:text-sm font-semibold shadow-xs"
+          >
+            <ReceiptText className="w-4 h-4 text-emerald-600" />
+            Load Invoice (PT. Arta Indoasia)
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={loadSampleInvoiceShinanoa}
+            className="flex items-center gap-2 border-emerald-400 bg-emerald-100/70 hover:bg-emerald-200/70 text-emerald-950 text-xs sm:text-sm font-semibold shadow-xs"
+          >
+            <ReceiptText className="w-4 h-4 text-emerald-700" />
+            Load Invoice dari PO (PT. Shinanoa)
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={loadSampleArtaIndoasia}
+            className="flex items-center gap-2 border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100/70 text-indigo-900 text-xs sm:text-sm font-medium"
+          >
+            <Sparkles className="w-4 h-4 text-indigo-600" />
+            Load Repair Impeller (PT. Arta Indoasia)
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={loadSampleGunturBerkatUtama}
+            className="flex items-center gap-2 border-sky-300 bg-sky-50/80 hover:bg-sky-100/80 text-sky-900 text-xs sm:text-sm font-semibold shadow-xs"
+          >
+            <Sparkles className="w-4 h-4 text-sky-600" />
+            Load Balancing On Site (PT. Guntur Berkat Utama)
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={loadSampleWorkshopTigori}
+            className="flex items-center gap-2 border-amber-200 bg-amber-50/70 hover:bg-amber-100/70 text-amber-900 text-xs sm:text-sm font-medium"
+          >
+            <Sparkles className="w-4 h-4 text-amber-600" />
+            Load Sewa Workshop (PT. Tigori)
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
             onClick={loadSampleDustCollector}
             className="flex items-center gap-2 border-blue-200 bg-blue-50/50 hover:bg-blue-100/50 text-blue-700 text-xs sm:text-sm font-medium"
           >
             <Sparkles className="w-4 h-4 text-blue-600" />
             Load Dust Collector Sample
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={loadSampleBaPenyelesaianProfiklin}
+            className="flex items-center gap-2 border-teal-300 bg-teal-50/80 hover:bg-teal-100/80 text-teal-900 text-xs sm:text-sm font-semibold shadow-xs"
+          >
+            <FileText className="w-4 h-4 text-teal-600" />
+            Load BA Penyelesaian (PT. Profiklin)
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={loadSampleBaDpMmid}
+            className="flex items-center gap-2 border-rose-300 bg-rose-50/80 hover:bg-rose-100/80 text-rose-900 text-xs sm:text-sm font-semibold shadow-xs"
+          >
+            <FileText className="w-4 h-4 text-rose-600" />
+            Load BA Pembayaran DP (PT. MMID)
           </Button>
         </div>
       </div>
@@ -632,7 +1268,21 @@ function DashboardContent() {
                 {/* General Details */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label className="text-xs font-semibold">Tipe Dokumen</Label>
+                    <div className="flex justify-between items-center">
+                      <Label className="text-xs font-semibold">Tipe Dokumen</Label>
+                      {docType === "PENAWARAN" && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={convertToInvoice}
+                          className="h-6 px-2 text-[11px] font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 flex items-center gap-1 rounded"
+                          title="Ubah dokumen penawaran ini langsung menjadi Invoice resmi"
+                        >
+                          <ReceiptText className="w-3 h-3 text-blue-600" /> Jadikan Invoice
+                        </Button>
+                      )}
+                    </div>
                     <Select
                       value={form.watch("docType")}
                       onValueChange={(val: any) => form.setValue("docType", val)}
@@ -681,10 +1331,14 @@ function DashboardContent() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
                       <div className="space-y-1.5">
                         <Label className="text-xs font-semibold">Attn (Penerima)</Label>
                         <Input {...form.register("clientAttn")} placeholder="Ibu Giacinta" className="bg-white" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold">CC (Tembusan)</Label>
+                        <Input {...form.register("clientCc")} placeholder="Kosongkan jika tidak ada" className="bg-white" />
                       </div>
                       <div className="space-y-1.5">
                         <Label className="text-xs font-semibold">Phone (Klien)</Label>
@@ -696,14 +1350,52 @@ function DashboardContent() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="space-y-1.5">
-                        <Label className="text-xs font-semibold">Waktu Pengadaan</Label>
-                        <Input {...form.register("leadTime")} placeholder="1 Bulan" className="bg-white" />
+                    {/* Waktu Pengadaan & Catatan (Checklist Controls) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2 bg-white/80 p-3 rounded-md border border-blue-100/80 shadow-2xs">
+                        <div className="flex items-center justify-between border-b pb-1.5">
+                          <label htmlFor="includeLeadTime" className="text-xs font-semibold text-gray-800 flex items-center gap-2 cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              id="includeLeadTime"
+                              {...form.register("includeLeadTime")}
+                              className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
+                            />
+                            <span>Waktu Pengadaan</span>
+                          </label>
+                          <span className={`text-[11px] font-medium px-1.5 py-0.5 rounded ${form.watch("includeLeadTime") ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-500"}`}>
+                            {form.watch("includeLeadTime") ? "Dimunculkan" : "Disembunyikan"}
+                          </span>
+                        </div>
+                        <Input
+                          {...form.register("leadTime")}
+                          placeholder="Contoh: 1 Bulan / 1-2 Minggu"
+                          className="bg-white text-xs disabled:opacity-40"
+                          disabled={!form.watch("includeLeadTime")}
+                        />
                       </div>
-                      <div className="space-y-1.5">
-                        <Label className="text-xs font-semibold">Catatan</Label>
-                        <Input {...form.register("note")} placeholder="Catatan tambahan..." className="bg-white" />
+
+                      <div className="space-y-2 bg-white/80 p-3 rounded-md border border-blue-100/80 shadow-2xs">
+                        <div className="flex items-center justify-between border-b pb-1.5">
+                          <label htmlFor="includeNote" className="text-xs font-semibold text-gray-800 flex items-center gap-2 cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              id="includeNote"
+                              {...form.register("includeNote")}
+                              className="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
+                            />
+                            <span>Catatan</span>
+                          </label>
+                          <span className={`text-[11px] font-medium px-1.5 py-0.5 rounded ${form.watch("includeNote") ? "bg-emerald-50 text-emerald-700" : "bg-gray-100 text-gray-500"}`}>
+                            {form.watch("includeNote") ? "Dimunculkan" : "Disembunyikan"}
+                          </span>
+                        </div>
+                        <Input
+                          {...form.register("note")}
+                          placeholder="Catatan tambahan (contoh: Harga belum termasuk PPN...)"
+                          className="bg-white text-xs disabled:opacity-40"
+                          disabled={!form.watch("includeNote")}
+                        />
                       </div>
                     </div>
 
@@ -714,6 +1406,28 @@ function DashboardContent() {
                         placeholder="40% DP, 60% setelah selesai pekerjaan"
                         className="bg-white"
                       />
+                    </div>
+
+                    {/* Rekening Pembayaran Opsional (BRI) */}
+                    <div className="pt-3 border-t border-blue-200/60">
+                      <div className="flex items-start space-x-2.5 bg-white p-3 rounded-md border border-blue-100">
+                        <input
+                          type="checkbox"
+                          id="includeBriAccount"
+                          {...form.register("includeBriAccount")}
+                          className="w-4 h-4 mt-0.5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
+                        />
+                        <label htmlFor="includeBriAccount" className="text-xs text-gray-700 cursor-pointer select-none space-y-0.5">
+                          <span className="font-semibold text-gray-900 block">
+                            Tambahkan Rekening Bank BRI di Bawah Bank Permata
+                          </span>
+                          <span className="text-gray-500 block">
+                            Menampilkan rekening tambahan pada bagian bawah surat penawaran:
+                            <br />
+                            <strong className="text-gray-800">Agus Jumadi — BRI Rekening No. 3263-01-024013-53-3</strong>
+                          </span>
+                        </label>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -731,9 +1445,142 @@ function DashboardContent() {
                       </div>
                       <div className="space-y-1.5">
                         <Label className="text-xs font-semibold">Terbilang (Opsional - otomatis jika kosong)</Label>
-                        <Input {...form.register("terbilang")} placeholder="dua ratus lima puluh satu juta rupiah" className="bg-white" />
+                        <Input {...form.register("terbilang")} placeholder="enam juta tujuh ratus lima puluh ribu rupiah" className="bg-white" />
                       </div>
                     </div>
+                    <div className="space-y-1.5 pt-1">
+                      <Label className="text-xs font-semibold">Alamat Klien (Ditampilkan di Invoice)</Label>
+                      <Input
+                        {...form.register("clientAddress")}
+                        placeholder="Jl. Orchard Avenue, Cluster Garden Hous Blok BG1 No.87, Grand Wisata, Tambun, Bekasi – 17510"
+                        className="bg-white"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold">Down Payment / DP (Rp) - Opsional jika pembayaran bertahap</Label>
+                        <Input
+                          type="number"
+                          {...form.register("downPayment", { valueAsNumber: true })}
+                          placeholder="0 jika pelunasan full"
+                          className="bg-white"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold">Sisa Pembayaran (Rp) - Opsional</Label>
+                        <Input
+                          type="number"
+                          {...form.register("remainingPayment", { valueAsNumber: true })}
+                          placeholder="0 jika tidak ada sisa"
+                          className="bg-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Berita Acara Specific Section */}
+                {docType === "BERITA_ACARA" && (
+                  <div className="p-4 bg-indigo-50/50 border border-indigo-200 rounded-lg space-y-3">
+                    <div className="text-xs font-bold text-indigo-900 uppercase tracking-wider flex items-center justify-between">
+                      <span>Detail Khusus Berita Acara</span>
+                      <span className="text-[11px] font-normal text-indigo-600 bg-indigo-100/60 px-2 py-0.5 rounded">
+                        Kop Resmi CV. STS + Stempel Otomatis
+                      </span>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-semibold">Jenis Berita Acara</Label>
+                      <Select
+                        value={form.watch("baType") || "PENYELESAIAN"}
+                        onValueChange={(val: any) => form.setValue("baType", val)}
+                      >
+                        <SelectTrigger className="bg-white">
+                          <SelectValue placeholder="Pilih Jenis Berita Acara" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="PENYELESAIAN">1. Berita Acara Penyelesaian Pekerjaan (Progress 100%)</SelectItem>
+                          <SelectItem value="DP">2. Berita Acara Pembayaran DP (Down Payment)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold">Nama Pekerjaan / Project</Label>
+                        <Input
+                          {...form.register("titleQuotation")}
+                          placeholder="Ducting Inlet & Dumper / Screw Conveyor"
+                          className="bg-white"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-semibold">No. PO / Kontrak</Label>
+                        <Input
+                          {...form.register("poNumber")}
+                          placeholder="073/PO/PC/11112025"
+                          className="bg-white"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <Label className="text-xs font-semibold">Alamat Lengkap Perusahaan Klien</Label>
+                      <Input
+                        {...form.register("clientAddress")}
+                        placeholder="Kawasan Industri MM2100, Cikarang Barat / Taman Tekno BSD"
+                        className="bg-white"
+                      />
+                    </div>
+
+                    {form.watch("baType") === "DP" ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-indigo-100">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold">Persentase DP</Label>
+                          <Input
+                            {...form.register("baDpPercent")}
+                            placeholder="40% (empat puluh persen)"
+                            className="bg-white"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold">Tanggal PO / Kontrak</Label>
+                          <Input
+                            {...form.register("baPoDate")}
+                            placeholder="8 Mei"
+                            className="bg-white"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold">Nilai DP (Rp)</Label>
+                          <Input
+                            type="number"
+                            {...form.register("downPayment", { valueAsNumber: true })}
+                            placeholder="260000000"
+                            className="bg-white"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-indigo-100">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold">Tanggal Selesai Pekerjaan</Label>
+                          <Input
+                            {...form.register("baCompletionDate")}
+                            placeholder="27 November 2025 (Opsional - otomatis tanggal dokumen)"
+                            className="bg-white"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-semibold">PIC / CC Klien</Label>
+                          <Input
+                            {...form.register("clientAttn")}
+                            placeholder="Bpk. Riyadh"
+                            className="bg-white"
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -776,7 +1623,7 @@ function DashboardContent() {
                                 className="h-8 text-center text-xs"
                               />
                             </div>
-                            <div className="col-span-5">
+                            <div className="col-span-4">
                               <Label className="text-xs text-gray-500">Description</Label>
                               <Input
                                 {...form.register(`items.${index}.description`)}
@@ -792,12 +1639,21 @@ function DashboardContent() {
                                 className="h-8 text-xs text-center"
                               />
                             </div>
-                            <div className="col-span-3">
+                            <div className="col-span-2">
+                              <Label className="text-xs text-gray-500">Price/Unit (Rp)</Label>
+                              <Input
+                                type="number"
+                                placeholder="0 (Kosongkan)"
+                                {...form.register(`items.${index}.unitPrice`, { valueAsNumber: true })}
+                                className="h-8 text-xs text-right font-medium"
+                              />
+                            </div>
+                            <div className="col-span-2">
                               <Label className="text-xs text-gray-500">Total Price (Rp)</Label>
                               <Input
                                 type="number"
                                 {...form.register(`items.${index}.subTotal`, { valueAsNumber: true })}
-                                className="h-8 text-xs text-right font-medium"
+                                className="h-8 text-xs text-right font-bold"
                               />
                             </div>
                             <div className="col-span-2 flex justify-end items-center gap-1 pt-4">

@@ -33,6 +33,7 @@ export const ExtractedDocumentSchema = z.object({
   docNumber: z.string(),
   date: z.string(),
   clientName: z.string(),
+  clientAddress: z.string(),
   totalAmount: z.number(),
   items: z.array(DocumentItemSchema),
 
@@ -46,12 +47,22 @@ export const ExtractedDocumentSchema = z.object({
   leadTime: z.string(),
   paymentTerms: z.string(),
   nonPpn: z.boolean(),
+  includeBriAccount: z.boolean(),
+  includeNote: z.boolean(),
+  includeLeadTime: z.boolean(),
 
   // Invoice & General metadata fields
   poNumber: z.string(),
   terbilang: z.string(),
   downPayment: z.number(),
   remainingPayment: z.number(),
+
+  // Berita Acara specific fields
+  baType: z.string(),
+  baCompletionDate: z.string(),
+  baDpPercent: z.string(),
+  baPoDate: z.string(),
+  baDateSpellout: z.string(),
 });
 
 export type ExtractedDocument = z.infer<typeof ExtractedDocumentSchema>;

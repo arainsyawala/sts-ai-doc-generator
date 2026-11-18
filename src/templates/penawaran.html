@@ -279,8 +279,16 @@
 
   <!-- Notes and Terms -->
   <ul class="notes-list">
-    <li>Catatan : {{note}}</li>
-    <li>Waktu Pengadaan : {{leadTime}}</li>
+    {{#if includeNote}}
+      {{#if note}}
+        <li>Catatan : {{note}}</li>
+      {{/if}}
+    {{/if}}
+    {{#if includeLeadTime}}
+      {{#if leadTime}}
+        <li>Waktu Pengadaan : {{leadTime}}</li>
+      {{/if}}
+    {{/if}}
     <li>Syarat Pembayaran : 
       {{#if paymentTerms}}
         {{paymentTerms}}
@@ -302,6 +310,12 @@
       <strong>Cv Surya Terang Sejahtera</strong><br/>
       <strong>Bank Permata</strong><br/>
       Rekening No. <strong>1225803028</strong>
+      {{#if includeBriAccount}}
+      <br/><br/>
+      <strong>Agus Jumadi</strong><br/>
+      <strong>BRI</strong><br/>
+      Rekening No. <strong>3263-01-024013-53-3</strong>
+      {{/if}}
     </div>
 
     <div class="signature-block">

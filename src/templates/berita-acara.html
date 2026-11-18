@@ -1,46 +1,340 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <title>{{docTitle}} - {{docNumber}}</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 40px; color: #333; }
-    .header { text-align: center; margin-bottom: 40px; }
-    .info { margin-bottom: 20px; line-height: 1.6; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-    th { background-color: #f8f9fa; font-weight: bold; }
-    .total { text-align: right; font-weight: bold; font-size: 1.2em; margin-top: 20px; }
+    @page {
+      size: A4 portrait;
+      margin: 18mm 20mm 18mm 20mm;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Times New Roman", Times, Georgia, serif;
+      font-size: 11pt;
+      line-height: 1.45;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+    .header-block {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .company-name {
+      font-size: 15pt;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+    .company-address {
+      font-size: 10.5pt;
+      margin-top: 2px;
+    }
+    .company-contact {
+      font-size: 10.5pt;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+    .header-divider {
+      border: none;
+      border-top: 2.5px solid #000;
+      margin: 10px 0 16px 0;
+    }
+    .title-block {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .doc-title {
+      font-size: 11.5pt;
+      font-weight: bold;
+      text-decoration: underline;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .doc-number {
+      font-size: 11pt;
+      margin-top: 3px;
+    }
+    .intro-paragraph {
+      text-align: justify;
+      margin-bottom: 14px;
+    }
+    .party-title {
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+    .party-list {
+      margin: 0 0 4px 0;
+      padding-left: 20px;
+      list-style-type: disc;
+    }
+    .party-list li {
+      margin-bottom: 3px;
+    }
+    .party-clause {
+      text-align: justify;
+      margin-bottom: 12px;
+    }
+    .detail-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+    }
+    .detail-table td {
+      vertical-align: top;
+      padding: 2.5px 0;
+      font-size: 11pt;
+    }
+    .detail-label {
+      width: 150px;
+    }
+    .detail-colon {
+      width: 15px;
+      text-align: center;
+    }
+    .content-paragraph {
+      text-align: justify;
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+    .results-list {
+      margin: 0 0 14px 0;
+      padding-left: 20px;
+    }
+    .results-list li {
+      text-align: justify;
+      margin-bottom: 6px;
+    }
+    .closing-paragraph {
+      text-align: justify;
+      margin-top: 16px;
+      margin-bottom: 24px;
+    }
+    .signature-section {
+      width: 100%;
+      margin-top: 10px;
+      page-break-inside: avoid;
+    }
+    .date-row {
+      text-align: right;
+      margin-bottom: 8px;
+      padding-right: 30px;
+    }
+    .sig-columns {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .sig-col-left {
+      width: 48%;
+      text-align: center;
+    }
+    .sig-col-right {
+      width: 48%;
+      text-align: center;
+      position: relative;
+    }
+    .sig-space {
+      height: 65px;
+    }
+    .sig-party-name {
+      font-weight: bold;
+      margin-top: 4px;
+    }
+    .stamp-container {
+      position: relative;
+      display: inline-block;
+    }
+    .stamp-img {
+      position: absolute;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 125px;
+      height: auto;
+      opacity: 0.92;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>BERITA ACARA</h1>
+
+  <!-- Letterhead / Kop Surat Resmi CV. STS -->
+  <div class="header-block">
+    <div class="company-name">CV. SURYA TERANG SEJAHTERA</div>
+    <div class="company-address">Jln. Kedaung Gang Tengah, RT 01 RW 06 No. 76<br/>Cimuning, Mustika Jaya – Kota Bekasi.</div>
+    <div class="company-contact">
+      Telpon : <strong>081280806155 / 085718597278</strong><br/>
+      Email: <i>suryaterangsejahtera@gmail.com</i>
+    </div>
   </div>
-  <div class="info">
-    <p><strong>Document Number:</strong> {{docNumber}}</p>
-    <p><strong>Date:</strong> {{date}}</p>
-    <p><strong>Client:</strong> {{clientName}}</p>
+  <hr class="header-divider"/>
+
+{{#if isBaDp}}
+  <!-- ================= 1. BERITA ACARA PEMBAYARAN DP ================= -->
+  <div class="title-block">
+    <div class="doc-title">BERITA ACARA PEMBAYARAN DP(DOWN PAYMENT)</div>
+    <div class="doc-number">No. : {{docNumber}}</div>
   </div>
-  <p>Telah diselesaikan / diserahterimakan item-item berikut:</p>
-  <table>
-    <thead>
-      <tr>
-        <th>Description</th>
-        <th>Qty</th>
-        <th>Unit Price</th>
-        <th>Subtotal</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each items}}
-      <tr>
-        <td>{{this.description}}</td>
-        <td>{{this.qty}}</td>
-        <td>{{this.unitPrice}}</td>
-        <td>{{this.subTotal}}</td>
-      </tr>
-      {{/each}}
-    </tbody>
+
+  <div class="intro-paragraph">
+    Pada hari ini <strong>{{dateSpellout.dayName}}</strong> tanggal <strong>{{dateSpellout.dayText}}</strong> bulan <strong>{{dateSpellout.monthText}}</strong> tahun <strong>{{dateSpellout.yearText}}</strong>.<br/>
+    Yang bertanda tangan dibawah ini menerangkan bahwa :
+  </div>
+
+  <div class="party-title">I. Pihak Pertama</div>
+  <ul class="party-list">
+    <li>Nama Lengkap : <strong>{{clientAttn}}</strong></li>
+    <li>Nama Perusahaan: <strong>{{clientName}}</strong></li>
+    <li>Alamat : {{clientAddress}}</li>
+  </ul>
+  <div class="party-clause">
+    Dalam hal ini bertindak untuk dan atas nama {{clientName}}, yang selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong> (Pihak Pembayar).
+  </div>
+
+  <div class="party-title">II. Pihak Kedua</div>
+  <ul class="party-list">
+    <li>Nama Lengkap : <strong>Agus Jumadi</strong></li>
+    <li>Nama Perusahaan: <strong>CV. Surya Terang Sejahtera</strong></li>
+    <li>Alamat : Jln. Kedaung Gang Tengah, RT 01 RW 06 No 76 Cimuning Mustika Jaya – Kota Bekasi</li>
+  </ul>
+  <div class="party-clause">
+    Dalam hal ini bertindak untuk dan atas nama CV Surya Terang Sejahtera, yang selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong> (Pihak Penerima).
+  </div>
+
+  <div class="content-paragraph">
+    Dengan ini menyatakan bahwa <strong>PIHAK PERTAMA</strong> telah melakukan pembayaran Uang Muka (<i>Down Payment</i>) kepada <strong>PIHAK KEDUA</strong> sebagai pelaksanaan dari Perjanjian/Kontrak/PO Nomor <strong>{{poNumber}}</strong>{{#if baPoDate}} tertanggal <strong>{{baPoDate}}</strong>{{/if}} mengenai Project: <strong>{{titleQuotation}}</strong>.
+  </div>
+
+  <div class="content-paragraph">
+    Adapun pembayaran Uang Muka yang telah dilakukan adalah sebesar <strong>{{#if baDpPercent}}{{baDpPercent}}{{else}}40% (empat puluh persen){{/if}}</strong> dari total nilai kontrak, yaitu senilai <strong>Rp {{formatRupiah downPayment}},- ({{#if terbilang}}{{terbilang}}{{else}}{{terbilangRupiahTitleCase downPayment}}{{/if}})</strong>.
+  </div>
+
+  <div class="closing-paragraph">
+    Demikian Berita Acara ini dibuat dan ditandatangani kedua belah Pihak dengan sebenar-benarnya untuk dapat dipergunakan sebagaimana mestinya.
+  </div>
+
+  <!-- Tanda Tangan Pembayaran DP -->
+  <div class="signature-section">
+    <div class="date-row">Bekasi, {{date}}</div>
+    <div class="sig-columns">
+      <div class="sig-col-left">
+        <div>Yang Menerima</div>
+        <div class="sig-space"></div>
+        <div class="sig-party-name">{{clientName}}</div>
+      </div>
+      <div class="sig-col-right">
+        <div>Hormat Kami</div>
+        <div class="sig-space" style="position: relative;">
+          {{#if stampBase64}}
+            <img src="{{stampBase64}}" class="stamp-img" />
+          {{/if}}
+        </div>
+        <div class="sig-party-name" style="text-decoration: underline;">Agus Jumadi</div>
+      </div>
+    </div>
+  </div>
+
+{{else}}
+  <!-- ================= 2. BERITA ACARA PENYELESAIAN PEKERJAAN ================= -->
+  <div class="title-block">
+    <div class="doc-title">BERITA ACARA PENYELESAIAN PEKERJAAN</div>
+    <div class="doc-number">No. : {{docNumber}}</div>
+  </div>
+
+  <div class="intro-paragraph">
+    Pada hari ini <strong>{{dateSpellout.dayName}}</strong> tanggal <strong>{{dateSpellout.dayText}}</strong> bulan <strong>{{dateSpellout.monthText}}</strong> tahun <strong>{{dateSpellout.yearText}}</strong>.<br/>
+    Yang bertanda tangan dibawah ini menerangkan bahwa :
+  </div>
+
+  <table class="detail-table">
+    <tr>
+      <td class="detail-label">Pekerjaan</td>
+      <td class="detail-colon">:</td>
+      <td><strong>{{titleQuotation}}</strong></td>
+    </tr>
+    <tr>
+      <td class="detail-label">No PO</td>
+      <td class="detail-colon">:</td>
+      <td>{{poNumber}}</td>
+    </tr>
+    <tr>
+      <td class="detail-label">Nilai Pekerjaan</td>
+      <td class="detail-colon">:</td>
+      <td>Rp. {{formatRupiah totalAmount}}</td>
+    </tr>
+    <tr>
+      <td class="detail-label">Pelaksana</td>
+      <td class="detail-colon">:</td>
+      <td><strong>CV. SURYA TERANG SEJAHTERA</strong></td>
+    </tr>
   </table>
-  <p class="total">Total Value: {{totalAmount}}</p>
+
+  <div style="margin: 10px 0 6px 0; font-weight: normal;">Untuk diserahkan kepada :</div>
+
+  <table class="detail-table">
+    <tr>
+      <td class="detail-label">Penerima</td>
+      <td class="detail-colon">:</td>
+      <td><strong>{{clientName}}</strong></td>
+    </tr>
+    {{#if clientAttn}}
+    <tr>
+      <td class="detail-label">CC</td>
+      <td class="detail-colon">:</td>
+      <td>{{clientAttn}}</td>
+    </tr>
+    {{/if}}
+    {{#if clientPhone}}
+    <tr>
+      <td class="detail-label">Phone</td>
+      <td class="detail-colon">:</td>
+      <td>{{clientPhone}}</td>
+    </tr>
+    {{/if}}
+    <tr>
+      <td class="detail-label">Alamat</td>
+      <td class="detail-colon">:</td>
+      <td>{{{nl2br clientAddress}}}</td>
+    </tr>
+  </table>
+
+  <div style="margin: 12px 0 4px 0;">Dengan hasil :</div>
+  <ol class="results-list">
+    <li>Telah menyelesaikan pekerjaan <i>{{titleQuotation}}</i> dengan progress 100% selesai.</li>
+    <li>Berpendapat bahwa Penyelesaian pekerjaan <i>{{titleQuotation}}</i> telah selesai dilakukan pada tanggal <strong>{{#if baCompletionDate}}{{baCompletionDate}}{{else}}{{date}}{{/if}}</strong></li>
+    <li>Berpendapat bahwa seluruh pekerjaan sebagaimana yang dimaksud dalam Surat Pesanan yang tersebut, beserta seluruh perubahan-perubahan telah diselesaikan penyerahan atas pekerjaan.</li>
+  </ol>
+
+  <div class="closing-paragraph">
+    Demikian Berita Acara ini dibuat dalam rangkap 2 (dua) ditandatangani oleh kedua belah pihak untuk dipergunakan sebagai mestinya.
+  </div>
+
+  <!-- Tanda Tangan Penyelesaian Pekerjaan -->
+  <div class="signature-section">
+    <div class="date-row">Bekasi, {{date}}</div>
+    <div class="sig-columns">
+      <div class="sig-col-left">
+        <div>Yang Menerima</div>
+        <div class="sig-space"></div>
+        <div class="sig-party-name">{{clientName}}</div>
+      </div>
+      <div class="sig-col-right">
+        <div>Hormat Kami</div>
+        <div class="sig-space" style="position: relative;">
+          {{#if stampBase64}}
+            <img src="{{stampBase64}}" class="stamp-img" />
+          {{/if}}
+        </div>
+        <div class="sig-party-name" style="text-decoration: underline;">Agus Jumadi</div>
+      </div>
+    </div>
+  </div>
+
+{{/if}}
+
 </body>
 </html>
